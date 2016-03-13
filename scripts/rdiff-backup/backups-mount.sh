@@ -30,16 +30,16 @@ PURGEDELAY="1W"
 
 # Check that the log file exists
 if [ -f "$LOG" ]; then
-        rm -f $LOG
+  rm -f $LOG
 fi
 
 # Check that source dir exists and is readable.
 if [ ! -r  "$BACKUP_FROM" ]; then
-        echo "$(date "+%Y-%m-%d %k:%M:%S") - ERROR: Unable to read source dir." >> "$LOG"
-        echo "$(date "+%Y-%m-%d %k:%M:%S") - ERROR: Unable to sync." >> "$LOG"
-        echo "" >> "$LOG"
-        cat $LOG | mail -s "$HOSTNAME : ERROR : source dir exists and is readable ($TASKNAME)" $EMAILADMIN -a "From:$EMAILFROM"
-        exit 1
+  echo "$(date "+%Y-%m-%d %k:%M:%S") - ERROR: Unable to read source dir." >> "$LOG"
+  echo "$(date "+%Y-%m-%d %k:%M:%S") - ERROR: Unable to sync." >> "$LOG"
+  echo "" >> "$LOG"
+  cat $LOG | mail -s "$HOSTNAME : ERROR : source dir exists and is readable ($TASKNAME)" $EMAILADMIN -a "From:$EMAILFROM"
+  exit 1
 fi
 
 # Check that target dir exists and is writable.
@@ -52,19 +52,19 @@ if [ ! -w  "$BACKUP_TO" ]; then
 fi
 
 # Check if the drive is mounted
-if ! mountpoint "$BACKUP_MNT"; then
-        echo "$(date "+%Y-%m-%d %k:%M:%S") - WARNING: Backup device needs mounting!" >> "$LOG"
+if ! mountpoint -q "$BACKUP_MNT"; then
+  echo "$(date "+%Y-%m-%d %k:%M:%S") - WARNING: Backup device needs mounting!" >> "$LOG"
 
-        # If not, mount the drive
-        if mount -U "$BACKUP_DEV"; then
-                echo "$(date "+%Y-%m-%d %k:%M:%S") - Backup device mounted." >> "$LOG"
-        else
-                echo "$(date "+%Y-%m-%d %k:%M:%S") - ERROR: Unable to mount backup device." >> "$LOG"
-                echo "$(date "+%Y-%m-%d %k:%M:%S") - ERROR: Unable to sync." >> "$LOG"
-                echo "" >> "$LOG"
-                cat $LOG | mail -s "$HOSTNAME : ERROR : Unable to mount backup device ($TASKNAME)" $EMAILADMIN -a "From:$EMAILFROM"
-                exit 1
-        fi
+  # If not, mount the drive
+  if mount -U "$BACKUP_DEV" "$BACKUP_MNT"; then
+    echo "$(date "+%Y-%m-%d %k:%M:%S") - Backup device mounted." >> "$LOG"
+    else
+      echo "$(date "+%Y-%m-%d %k:%M:%S") - ERROR: Unable to mount backup device." >> "$LOG"
+      echo "$(date "+%Y-%m-%d %k:%M:%S") - ERROR: Unable to sync." >> "$LOG"
+      echo "" >> "$LOG"
+      cat $LOG | mail -s "$HOSTNAME : ERROR : Unable to mount backup device ($TASKNAME)" $EMAILADMIN -a "From:$EMAILFROM"
+      exit 1
+  fi
 fi
 
 # Start entry in the log
@@ -74,21 +74,21 @@ echo "==========================================================================
 
 # Start sync
 if rdiff-backup --force "$BACKUP_FROM" "$BACKUP_TO" &>> "$LOG"; then
-        echo "$(date "+%Y-%m-%d %k:%M:%S") - Sync completed succesfully." >> "$LOG"
-        rdiff-backup --remove-older-than "$PURGEDELAY" --force "$BACKUP_TO" &>> "$LOG"
-else
-        echo "$(date "+%Y-%m-%d %k:%M:%S") - ERROR: rsync-command failed." >> "$LOG"
-        echo "$(date "+%Y-%m-%d %k:%M:%S") - ERROR: Unable to sync." >> "$LOG"
-        echo "" >> "$LOG"
-        cat $LOG | mail -s "$HOSTNAME : ERROR : rsync-command failed ($TASKNAME)" $EMAILADMIN -a "From:$EMAILFROM"
-        exit 1
+  echo "$(date "+%Y-%m-%d %k:%M:%S") - Sync completed succesfully." >> "$LOG"
+  rdiff-backup --remove-older-than "$PURGEDELAY" --force "$BACKUP_TO" &>> "$LOG"
+  else
+    echo "$(date "+%Y-%m-%d %k:%M:%S") - ERROR: rdiff-backup command failed." >> "$LOG"
+    echo "$(date "+%Y-%m-%d %k:%M:%S") - ERROR: Unable to sync." >> "$LOG"
+    echo "" >> "$LOG"
+    cat $LOG | mail -s "$HOSTNAME : ERROR : rdiff-backup command failed ($TASKNAME)" $EMAILADMIN -a "From:$EMAILFROM"
+    exit 1
 fi
 
 # Unmount the drive so it does not accidentally get damaged or wiped
 if umount "$BACKUP_MNT"; then
   echo "$(date "+%Y-%m-%d %k:%M:%S") - Backup device unmounted." >> "$LOG"
 else
-	echo "$(date "+%Y-%m-%d %k:%M:%S") - WARNING: Backup device could not be unmounted." >> "$LOG"
+  echo "$(date "+%Y-%m-%d %k:%M:%S") - WARNING: Backup device could not be unmounted." >> "$LOG"
 fi
 
 # End entry in the log
