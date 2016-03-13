@@ -1,3 +1,0 @@
-GITHUBMIRROR:
-  script:
-    - git push -q -f --follow-tags --mirror https://$GITHUB_USERNAME:$GITHUB_PASSWORD@github.com/thelinuxfr/$GITHUB_REPO.git
