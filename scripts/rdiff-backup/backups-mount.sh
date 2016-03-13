@@ -38,7 +38,7 @@ if [ ! -r  "$BACKUP_FROM" ]; then
         echo "$(date "+%Y-%m-%d %k:%M:%S") - ERROR: Unable to read source dir." >> "$LOG"
         echo "$(date "+%Y-%m-%d %k:%M:%S") - ERROR: Unable to sync." >> "$LOG"
         echo "" >> "$LOG"
-        cat $LOG | mail -s "$HOSTNAME : ERROR : source dir exists and is readable ($TASKNAME)" -S from="$EMAILFROM" $EMAILADMIN
+        cat $LOG | mail -s "$HOSTNAME : ERROR : source dir exists and is readable ($TASKNAME)" $EMAILADMIN -a "From:$EMAILFROM"
         exit 1
 fi
 
@@ -47,7 +47,7 @@ if [ ! -w  "$BACKUP_TO" ]; then
         echo "$(date "+%Y-%m-%d %k:%M:%S") - ERROR: Unable to write to target dir." >> "$LOG"
         echo "$(date "+%Y-%m-%d %k:%M:%S") - ERROR: Unable to sync." >> "$LOG"
         echo "" >> "$LOG"
-        cat $LOG | mail -s "$HOSTNAME : ERROR : target dir exists and is writable ($TASKNAME)" -S from="$EMAILFROM" $EMAILADMIN
+        cat $LOG | mail -s "$HOSTNAME : ERROR : target dir exists and is writable ($TASKNAME)" $EMAILADMIN -a "From:$EMAILFROM"
         exit 1
 fi
 
@@ -62,7 +62,7 @@ if ! mountpoint "$BACKUP_MNT"; then
                 echo "$(date "+%Y-%m-%d %k:%M:%S") - ERROR: Unable to mount backup device." >> "$LOG"
                 echo "$(date "+%Y-%m-%d %k:%M:%S") - ERROR: Unable to sync." >> "$LOG"
                 echo "" >> "$LOG"
-                cat $LOG | mail -s "$HOSTNAME : ERROR : Unable to mount backup device ($TASKNAME)" -S from="$EMAILFROM" $EMAILADMIN
+                cat $LOG | mail -s "$HOSTNAME : ERROR : Unable to mount backup device ($TASKNAME)" $EMAILADMIN -a "From:$EMAILFROM"
                 exit 1
         fi
 fi
@@ -80,7 +80,7 @@ else
         echo "$(date "+%Y-%m-%d %k:%M:%S") - ERROR: rsync-command failed." >> "$LOG"
         echo "$(date "+%Y-%m-%d %k:%M:%S") - ERROR: Unable to sync." >> "$LOG"
         echo "" >> "$LOG"
-        cat $LOG | mail -s "$HOSTNAME : ERROR : rsync-command failed ($TASKNAME)" -S from="$EMAILFROM" $EMAILADMIN
+        cat $LOG | mail -s "$HOSTNAME : ERROR : rsync-command failed ($TASKNAME)" $EMAILADMIN -a "From:$EMAILFROM"
         exit 1
 fi
 
