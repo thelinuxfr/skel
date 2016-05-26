@@ -26,6 +26,10 @@ alias h='history' # raccourci history
 alias mkdir='mkdir -p'  # pour éviter l'écrasement lors de création de dossier
 alias ..='cd ..'  # raccourci répertoire parent
 
+# Ajout log en couleurs nécessite le paquet ccze
+ctail() { tail -f $1 | ccze -A; }
+cless() { ccze -A < $1 | less -R; }
+
 #set a fancy prompt (non-color, unless we know we "want" color)
 PS1="\\[\\033[01;31m\\][\\u@\\h\\[\\033[00m\\]:\\[\\033[01;34m\\]\\w]\\[\\033[00m\\]\\$ "
 
