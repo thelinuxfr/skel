@@ -16,9 +16,9 @@
 server {
 	listen 80 default_server;
 	listen [::]:80 default_server;
-  # Letsencrypt multi-domain
+	# Letsencrypt multi-domain
 	location /.well-known/acme-challenge {
-  root /var/www/letsencrypt;
+	root /var/www/letsencrypt;
     }
 
 	# SSL configuration
