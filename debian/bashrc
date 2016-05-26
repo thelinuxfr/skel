@@ -2,31 +2,29 @@
 # Alias
 #-------------------
 
-alias ls='ls -h --color --group-directories-first'	# la couleur pour chaque type de fichier, les répertoires s'affichent en premier
-alias lsa='ls -A'	# affiche les fichiers cachés
-alias ll='ls -ls'	# affiche en mode liste détail
-alias lla='ls -Al'	# affiche en mode liste détail + fichiers cachés
-alias lx='ls -lXB'	# tri par extension
-alias lk='ls -lSr'      # tri par taille, le plus lourd à la fin
-alias lc='ls -ltcr'     # tri par date de modification, la pus récente à la fin
-alias lu='ls -ltur'     # tri par date d’accès, la pus récente à la fin
-alias lt='ls -ltr'      # tri par date, la pus récente à la fin
-alias lm='ls -al | more'        # Pipe a travers 'more'
-alias lr='ls -lR'       # ls récurssif
+alias ls='ls -h --color --group-directories-first'  # la couleur pour chaque type de fichier, les répertoires s'affichent en premier
+alias lsa='ls -A' # affiche les fichiers cachés
+alias ll='ls -ls' # affiche en mode liste détail
+alias lla='ls -Al'  # affiche en mode liste détail + fichiers cachés
+alias lx='ls -lXB'  # tri par extension
+alias lk='ls -lSr'  # tri par taille, le plus lourd à la fin
+alias lc='ls -ltcr' # tri par date de modification, la plus récente à la fin
+alias lu='ls -ltur' # tri par date d’accès, la plus récente à la fin
+alias lt='ls -ltr'  # tri par date, la plus récente à la fin
+alias lm='ls -al | more'  # Pipe a travers 'more'
+alias lr='ls -lR' # ls récurssif
 alias tree='tree -Csu'  # affciche sous forme d'arborescence, nécessite le paquet "tree"
 alias voirlog='tail -f' # affiche les dernière d'un fichier log (par exemple) en live
-alias df='df -kTh'      # commande df avec l'option -human
-alias du='du -kh'       # commande du avec l'option -human
-alias du1='du -kh --max-depth=1'        # commande du avec l'option -human, au niveau du répertoire courant
-alias free='free -m'    # commande free avec l'option affichage en Mo
+alias df='df -kTh'  # commande df avec l'option -human
+alias du='du -kh' # commande du avec l'option -human
+alias duc='du -kh --max-depth=1'  # commande du avec l'option -human, au niveau du répertoire courant
+alias free='free -m'  # commande free avec l'option affichage en Mo
 
-#alias cp='cp -i'        # confirmation si écrasement de fichiers lors de copie de fichier
-#alias mv='mv -i'                # confirmation si écrasement de fichiers lors de déplacement de fichier
-alias top='htop'                # nécessite le paquet "htop", un top amélioré et en couleur
-alias shistory='history | grep'        # faire une recherche dans l'historique de commande
-alias h='history'              # raccourci history
+alias top='htop'  # nécessite le paquet "htop", un top amélioré et en couleur
+alias shistory='history | grep' # faire une recherche dans l'historique de commande
+alias h='history' # raccourci history
 alias mkdir='mkdir -p'  # pour éviter l'écrasement lors de création de dossier
-alias ..='cd ..'        # raccourci répertoire parent
+alias ..='cd ..'  # raccourci répertoire parent
 
 #set a fancy prompt (non-color, unless we know we "want" color)
 PS1="\\[\\033[01;31m\\][\\u@\\h\\[\\033[00m\\]:\\[\\033[01;34m\\]\\w]\\[\\033[00m\\]\\$ "
@@ -36,7 +34,6 @@ export HISTTIMEFORMAT="%Y/%m/%d_%T : "
 
 # les pages de man en couleur, nécessite le paquet "most"
 export PAGER=most
-
 
 # enable bash completion in interactive shells
 if [ -f /etc/bash_completion ]; then
