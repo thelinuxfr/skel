@@ -1,0 +1,40 @@
+# Exemple simple de vhost avec redirection du traffic HTTP vers HTTPS et alias pour certification avec Letsencrypt
+
+server {
+  listen 80;
+  listen [::]:80;
+
+  server_name mon.domaine.fr;
+
+  location /.well-known/acme-challenge {
+  root /var/www/letsencrypt;
+  }
+
+  location / {
+    return 301 https://$server_name$request_uri;
+  }
+}
+
+server {
+  listen 443 ssl spdy;
+	listen [::]:443 ssl spdy;
+	server_name mon.domaine.fr;
+
+  ssl on;
+  ssl_certificate /etc/ssl/private/mon.domaine.fr-cert.pem;
+  ssl_certificate_key /etc/ssl/private/mon.domaine.fr-key.pem;
+
+	root /var/www/mon.domaine.fr/;
+	index index.php index.htm;
+	access_log /var/log/nginx/mon.domaine.fr.access.log;
+	error_log /var/log/nginx/mon.domaine.fr.error.log;
+
+	location / {
+    allow all;
+
+    # Restrict by IP
+    # allow xxx.xxx.xxx.xxx;
+		# allow xxxx:xxxx:xxxx:xxxx:xxxx::x/xx;
+		#deny all;
+        }
+}
